@@ -1,0 +1,13 @@
+{
+    "PlayerSpeed": 9.0,
+    "MaxScore": "최고생존 : 00 : 49",
+    "Coin": 36413,
+    "MaxHp": 10.0,
+    "isLevel": 1,
+    "Bullet_Damage": 10.0,
+    "GunSpeed": 1.5999999046325684,
+    "Hp_level": 1,
+    "ATT_level": 1,
+    "ATS_level": 5,
+    "SPD_level": 1
+}

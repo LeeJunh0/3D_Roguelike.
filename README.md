@@ -5,7 +5,7 @@
 - [마무리](#마무리)
 # 구현내용
 - [데이터 세이브로드](#데이터-세이브로드)
-- [맵, 몬스터재배치](#맵,-몬스터재배치)
+- [맵,몬스터재배치](#맵,몬스터재배치)
 - [액티브 스킬구현](#액티브-스킬구현)
 - [시간에 따른 난이도구현](#시간에-따른-난이도구현)
 - [웨이브 이벤트](#웨이브-이벤트)
@@ -63,7 +63,7 @@ public void SaveData()
 }
 
 ```
-# 맵, 몬스터재배치
+# 맵,몬스터재배치
 ## 맵 재배치    
 <img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/af0bfaca-b2ae-44fe-8da9-b74ec8060e0e" width="400px" height = "300px">
 <img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/3ab8ae19-b621-420a-bbcf-e90f25b13088" width="400px" height = "300px">

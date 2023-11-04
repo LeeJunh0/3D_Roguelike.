@@ -51,6 +51,7 @@ public void LoadData()
 }
 ```
 - Save함수
+
 ```C#
 public void SaveData()
 {
@@ -68,11 +69,14 @@ public void SaveData()
 ## 몬스터와 맵 재배치
 ### 몬스터 재배치
 <img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/b468e8a4-7bea-445a-a688-d1c484a6ee8f" width="400px" height = "300px">
-<img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/6a80bf43-076f-4e5d-b633-d96ee015100e" width="400px" height = "300px"> 
+<img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/6a80bf43-076f-4e5d-b633-d96ee015100e" width="400px" height = "300px"> <br>
+- 몬스터가 경계에서 떨어질때 플레이어주변 랜덤한 위치로 재배치 되도록 구현
+
 
 ### 맵 재배치    
 <img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/af0bfaca-b2ae-44fe-8da9-b74ec8060e0e" width="400px" height = "300px">
-<img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/3ab8ae19-b621-420a-bbcf-e90f25b13088" width="400px" height = "300px">
+<img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/3ab8ae19-b621-420a-bbcf-e90f25b13088" width="400px" height = "300px"> <br>
+- 맵이 경계에서 떨어질때 플레이어의 진행방향으로 맵을 재배치하도록 구현
 
 ### 재배치 상세코드  
 ```C#
@@ -114,8 +118,12 @@ switch (gameObject.tag)
 }
 ```
 ## 액티브 스킬구현
-### 방패스킬
+### 회전방패
 
+### 바닥지속오라
+   
+### 비둘기
+   
 ## 시간에 따른 난이도구현
 ## 웨이브 이벤트
 # 마무리

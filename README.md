@@ -64,7 +64,51 @@ public void SaveData()
 
 ```
 # 맵, 몬스터재배치
-- 맵 재배치
+## 맵 재배치    
 <img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/af0bfaca-b2ae-44fe-8da9-b74ec8060e0e" width="400px" height = "300px">
 <img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/3ab8ae19-b621-420a-bbcf-e90f25b13088" width="400px" height = "300px">
+
+  
+## 몬스터 재배치
+<img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/b468e8a4-7bea-445a-a688-d1c484a6ee8f" width="400px" height = "300px">
+<img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/6a80bf43-076f-4e5d-b633-d96ee015100e" width="400px" height = "300px">    
+
+## 재배치 상세코드  
+```C#
+Vector3 InputVec = GameManager.gameManager.PlayerScript.MoveVec;
+float inputX = InputVec.x < 0 ? -1 : 1;
+float inputZ = InputVec.z < 0 ? -1 : 1;
+
+switch (gameObject.tag)
+{
+    case "Ground":
+    if(Mathf.Abs(diffX-diffZ) <= 0.1f)
+    {
+          // 미세한차이로 맵타일이 튕겨져 나가는것을 방지하기 위함
+          gameObject.transform.Translate(Vector3.up * inputZ * 100f);
+          gameObject.transform.Translate(Vector3.right * inputX * 100f);
+    }
+    else if(diffX >= diffZ)
+    {
+        // 좌우 재배치
+        gameObject.transform.Translate(Vector3.right * inputX * 100f);
+        return;
+    }
+    else if(diffX <= diffZ)
+    {
+        //위아래 재배치
+        gameObject.transform.Translate(new Vector3(0, 0, 1) * inputZ * 100f);
+        return;
+    }
+    break;
+    case "Enermy":
+    if(gameObject.layer == 8)
+    {
+        //몬스터는 플레이어의 주변 랜덤한 위치에서 재배치되도록 구현
+        gameObject.transform.position = (playerPos + (GameManager.gameManager.PlayerScript.MoveVec * 25f) + new Vector3(Random.Range(-3f, 3f), 0, Random.Range(-3f, 3f)));                  
+        return;
+    }          
+    break;
+}
+```
 

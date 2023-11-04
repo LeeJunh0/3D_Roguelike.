@@ -10,7 +10,7 @@
   >[맵 재배치](#맵-재배치)
 - [액티브 스킬구현](#액티브-스킬구현)
 - [시간에 따른 난이도구현](#시간에-따른-난이도구현)
-- [웨이브 이벤트](#웨이브-이벤트)
+- [Wave Event](#wave-event)
 
 ## 데이터 세이브로드
 싱글톤으로 구현하여 언제든 저장을 할수있도록 구현,   
@@ -274,6 +274,163 @@ void Spawn(SpawnData data)
         Mob_Init.time = 1.5f;
     }
 }
+
 ```
-## 웨이브 이벤트
+## Wave Event
+**유저에게 최소한의 스펙을 강요하는 이벤트로 5개의 웨이브로 구성**   
+각 웨이브마다 Inspector창에서 해당 WaveStatus로 초기화 
+
+### First Wave
+<img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/9cc4ee49-fc47-4597-b8ac-d4d3fe6fe742" width="600px" height = "500px">
+<br>
+- 원형으로 플레이어를 포위하며 다가오는 웨이브
+<br>
+<br>
+
+```C#
+public void Wave1Init()
+{
+    Transform center = playerpos;
+    float radius = 25f;
+    for (int i = 1; i <= 72; i++)
+    {
+        // 스폰과정 생략...
+        // 72마리의 몬스터를 원형에 맞게 위치지정
+        float rad = Mathf.Deg2Rad * (i * 5);
+        float x = radius * Mathf.Sin(rad);
+        float z = radius * Mathf.Cos(rad);
+
+        enemy.transform.position = playerpos.position + new Vector3(x, 0, z);
+        // 웨이브몬스터 Status 초기화
+        Enermy status = enemy.GetComponent<Enermy>();
+        status.maxHp = WaveDatas[0].MaxHP;
+        status.curHp = status.maxHp;
+        status.MoveSpeed = WaveDatas[0].Speed;
+        status.Damage = WaveDatas[0].Damage;
+        status.MyWave = 1;
+        Duration = WaveDatas[0].LifeTime;
+    }
+NowWave = 1;
+}
+```
+### Second Wave
+<img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/676070ab-1336-41ab-ade2-c40343fefc39" width="600px" height = "500px">
+<br>
+- 소규모무리가 빠른속도로 특정방향을 향해 돌진하는 웨이브(지속적으로 발생)
+<br>
+<br>
+
+- 웨이브 생성코드
+
+```C#
+public void Wave2Init()
+{    
+    Temppos = GameManager.gameManager.PlayerScript.transform;
+        
+    Transform temppos = GameManager.gameManager.spawner.SpawnPoints[Random.Range(1,5)].transform;       
+    Speed = 15f;
+    for(int i = 0; i < 15; i++)
+        {
+            // 보스등장시 웨이브몬스터는 전부 사라지기때문에 관리에 용이하도록 리스트에 보관
+            SubWaveList.Add(Pooling.instance.GetElement(this.gameObject));
+            SubWaveList[i].layer = 21;
+            SubWaveList[i].tag = "WaveEnemy";
+            SubWaveList[i].SetActive(true);
+            SubWaveList[i].transform.position = temppos.position + new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
+            
+            Enermy status = SubWaveList[i].GetComponent<Enermy>();
+            status.maxHp = WaveDatas[1].MaxHP;
+            status.curHp = status.maxHp;
+            status.MoveSpeed = WaveDatas[1].Speed;
+            status.Damage = WaveDatas[1].Damage;
+            status.MyWave = 2;
+            Duration = WaveDatas[1].LifeTime;
+            // 동작코드...
+        }
+}
+```
+- 웨이브 동작코드
+```C#
+for(int i = 0; i < SubWaveList.Count; i++)
+{
+    // 플레이어의 주변포인트로 Speed만큼 빠르게 가도록 지정
+    Rigidbody rigid = SubWaveList[i].GetComponent<Rigidbody>();
+    rigid.velocity = new Vector3(Temppos.position.x -SubWaveList[i].transform.position.x, 0, Temppos.position.zSubWaveList[i].transform.position.z).normalized * Speed;
+    SubWaveList[i].transform.LookAt(new Vector3(Temppos.position.x - SubWaveList[i].transform.position.z,
+    0, Temppos.position.z - SubWaveList[i].transform.position.z));
+}
+SubTimer = 0f;
+SubWaveList.Clear();
+```
+### Third Wave
+<img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/2f17bec5-826c-4227-a864-8eccfeea9adb" width="600px" height = "500px">
+<br>
+- 왼쪽에서 오른쪽으로 간격을 유지하며 다가오는 웨이브
+<br>
+
+```C#
+public void Wave3Init()
+{
+    for(int i = 0; i < 30; i++)
+    {
+    GameObject enemy = Pooling.instance.GetElement(this.gameObject);
+    enemy.layer = 21;
+    enemy.tag = "WaveEnemy";
+    enemy.SetActive(true);
+
+    Enermy status = enemy.GetComponent<Enermy>();
+    status.maxHp = WaveDatas[2].MaxHP;
+    status.curHp = status.maxHp;
+    status.MoveSpeed = WaveDatas[2].Speed;
+    status.Damage = WaveDatas[2].Damage;
+    status.MyWave = 3;
+    Duration = WaveDatas[2].LifeTime;
+
+    enemy.transform.position = new Vector3(playerpos.position.x - 30f, 0, playerpos.position.z - 50f + (i * 4f));
+    }
+    NowWave = 3;
+}
+```
+### Fourth Wave
+<img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/c6b6a3e3-64b3-424c-b576-c02236428550" width="600px" height = "500px">
+<br>
+- 상하좌우 에서 세번째 웨이브가 발생하는 웨이브
+<br>
+- 웨이브 생성코드
+
+```C#
+public void Wave4Init()
+    {
+        List<GameObject> Enemylist = new List<GameObject>();
+        for(int i = 0; i < 120; i++)
+        {
+            //생성 및 Status초기화 생략...
+        }
+        // 웨이브 동작코루틴
+        StartCoroutine(Wave4Cor(Enemylist));
+        NowWave = 4;
+    }
+```
+- 웨이브 동작코드
+```C#
+public IEnumerator Wave4Cor(List<GameObject> list)
+{
+    // 상하좌우로 동작하는 세번째웨이브를 실행.
+    for (int i = 0; i < 30; i++)
+    {
+        list[i].SetActive(true);
+        list[i].transform.position = new Vector3(playerpos.position.x - 30f, 0, playerpos.position.z - 50f + (i * 5f));
+        list[i].transform.LookAt(new Vector3(9999f, 0, list[i].transform.position.z));           
+    }
+    list.RemoveRange(0, 30);
+    yield return new WaitForSeconds(1f);
+    // 방향만 다른 반복코드 생략...
+}
+```
+### Fifth Wave
+<img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/96efc4af-3d5d-42da-9b7d-619f6b42bc7d" width="600px" height = "500px">
+<br>
+- 첫번째 웨이브가 지속적으로 발생하는 웨이브
+<br>
+
 # 마무리

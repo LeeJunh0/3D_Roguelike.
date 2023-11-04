@@ -14,7 +14,9 @@
 
 ## 데이터 세이브로드
 싱글톤으로 구현하여 언제든 저장을 할수있도록 구현,   
-**PlayerData를 수정하여 다른 데이터방식도 저장할수있도록 구현**
+**PlayerData를 수정하여 다른 데이터 방식도 저장할 수 있도록 구현**
+<br>
+
 ```C#
 static public DataController instance = null;
 public PlayerData playerData;
@@ -32,25 +34,29 @@ private void Awake()
   DontDestroyOnLoad(this);
 }
 ```
+<br>
+
 - Load함수
 ```C#
 public void LoadData()
 {
     string FilePath = Application.persistentDataPath + "/Save";
 
-    // 데이터파일이 있는지 확인
+    // 데이터 파일이 있는지 확인
     if (File.Exists(FilePath) == true)
     {          
         string FromJsonFile = File.ReadAllText(FilePath);
         playerData = JsonUtility.FromJson<PlayerData>(FromJsonFile);            
     }
-    // 없다면 초기값 데이터생성
+    // 없다면 초기값 데이터 생성
     else
     {
         playerData = new PlayerData();            
     }
 }
 ```
+<br>
+
 - Save함수
 
 ```C#
@@ -70,14 +76,18 @@ public void SaveData()
 ## 몬스터와 맵 재배치
 ### 몬스터 재배치
 <img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/b468e8a4-7bea-445a-a688-d1c484a6ee8f" width="400px" height = "300px">
-<img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/6a80bf43-076f-4e5d-b633-d96ee015100e" width="400px" height = "300px"> <br>
-- 몬스터가 경계에서 떨어질때 플레이어주변 랜덤한 위치로 재배치 되도록 구현
+<img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/6a80bf43-076f-4e5d-b633-d96ee015100e" width="400px" height = "300px"> 
+<br>
+
+- 몬스터가 경계에서 떨어질 때 플레이어 주변 랜덤 한 위치로 재배치 되도록 구현
 
 
 ### 맵 재배치    
 <img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/af0bfaca-b2ae-44fe-8da9-b74ec8060e0e" width="400px" height = "300px">
-<img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/3ab8ae19-b621-420a-bbcf-e90f25b13088" width="400px" height = "300px"> <br>
-- 맵이 경계에서 떨어질때 플레이어의 진행방향으로 맵을 재배치하도록 구현
+<img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/3ab8ae19-b621-420a-bbcf-e90f25b13088" width="400px" height = "300px"> 
+<br>
+
+- 맵이 경계에서 떨어질 때 플레이어의 진행 방향으로 맵을 재배치하도록 구현
 
 ### 재배치 상세코드  
 ```C#
@@ -90,7 +100,7 @@ switch (gameObject.tag)
     case "Ground":
     if(Mathf.Abs(diffX-diffZ) <= 0.1f)
     {
-          // 미세한차이로 맵타일이 튕겨져 나가는것을 방지하기위해 구현하였다.
+          // 미세한 차이로 맵 타일이 튕겨져 나가는 것을 방지하기 위해 구현
           gameObject.transform.Translate(Vector3.up * inputZ * 100f);
           gameObject.transform.Translate(Vector3.right * inputX * 100f);
     }
@@ -147,13 +157,13 @@ if (Shield_Count.Count > 0)
 ```
 ### 바닥지속오라
 <img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/9b951625-66b8-4a6f-8c77-655a5a500ae0" width="600px" height = "300px"><br>
-- 최대레벨시 닿은적에게 슬로우부여
+- 최대 레벨 시 닿은 적에게 디버프 부여
 ```C#
 private void OnTriggerStay(Collider other)
 {       
     if(other.gameObject.layer == 17 && (gameObject.layer == 8 || gameObject.layer == 21))
     {
-        // 스킬레벨 확인후 슬로우코루틴실행
+        // 스킬 레벨 확인 후 디버프코루틴 실행
         if (SkillManager.skillManager.Skill_Inventory[1].Level >= 5)
         {
             float sec = SkillManager.skillManager.Skill_Inventory[1].Debuffsec;
@@ -195,7 +205,7 @@ if (Crow_Count.Count > 0)
 void Update()
 {
     // 공격 가능한 시간일때 Overlap을 만들어 공격가능한 몬스터를 배열에 담고
-    // 배열을 순회하며 해당몬스터의 피격코루틴을 실행
+    // 배열을 순회하며 피격코루틴을 실행
     AttackRange = SkillManager.skillManager.HowlingRange;
     LoopTime = SkillManager.skillManager.AttackDelay;
     CurTime += Time.deltaTime;
@@ -217,7 +227,7 @@ void Update()
     }
 }
 ```
-## 시간에 따른 난이도구현
+## 시간에 따른 난이도 구현
 **시간에 따른 난이도 상승을 위해 구현**
 - 유니티에서의 스폰설정<br>
 <img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/5017d0f5-9477-4b2f-abe7-82f8a9bcec27" width="400px" height = "600px">
@@ -239,7 +249,7 @@ public class SpawnData
 ### Spawn레벨설정 및 몬스터Status값설정
 #### Spawn레벨설정
 ```C#
-// PlayTime에 따라 스폰레벨값을 변경
+// PlayTime에 따라 스폰 레벨 값을 변경
 // 현재 스폰레벨에 맞는 스폰시간으로 지정
 time += Time.deltaTime;
 SpawnLevel = Mathf.FloorToInt(GameManager.gameManager.UiManager.PlayTime / 100);
@@ -283,8 +293,8 @@ void Spawn(SpawnData data)
 ### First Wave
 <img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/9cc4ee49-fc47-4597-b8ac-d4d3fe6fe742" width="600px" height = "500px">
 <br>
+
 - 원형으로 플레이어를 포위하며 다가오는 웨이브
-<br>
 <br>
 
 ```C#
@@ -316,8 +326,8 @@ NowWave = 1;
 ### Second Wave
 <img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/676070ab-1336-41ab-ade2-c40343fefc39" width="600px" height = "500px">
 <br>
-- 소규모무리가 빠른속도로 특정방향을 향해 돌진하는 웨이브(지속적으로 발생)
-<br>
+
+- 소규모 무리가 빠른 속도로 특정 방향을 향해 돌진하는 웨이브(지속적으로 발생)
 <br>
 
 - 웨이브 생성코드
@@ -331,29 +341,25 @@ public void Wave2Init()
     Speed = 15f;
     for(int i = 0; i < 15; i++)
         {
-            // 보스등장시 웨이브몬스터는 전부 사라지기때문에 관리에 용이하도록 리스트에 보관
+            // 보스 등장 시 웨이브 몬스터는 전부 사라지기 때문에 관리에 용이하도록 리스트에 보관
             SubWaveList.Add(Pooling.instance.GetElement(this.gameObject));
             SubWaveList[i].layer = 21;
             SubWaveList[i].tag = "WaveEnemy";
             SubWaveList[i].SetActive(true);
             SubWaveList[i].transform.position = temppos.position + new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
             
-            Enermy status = SubWaveList[i].GetComponent<Enermy>();
-            status.maxHp = WaveDatas[1].MaxHP;
-            status.curHp = status.maxHp;
-            status.MoveSpeed = WaveDatas[1].Speed;
-            status.Damage = WaveDatas[1].Damage;
-            status.MyWave = 2;
-            Duration = WaveDatas[1].LifeTime;
+            // Status 초기화코드 생략...
             // 동작코드...
         }
 }
 ```
+<br>
+
 - 웨이브 동작코드
 ```C#
 for(int i = 0; i < SubWaveList.Count; i++)
 {
-    // 플레이어의 주변포인트로 Speed만큼 빠르게 가도록 지정
+    // 플레이어의 주변 포인트로 Speed 만큼 빠르게 가도록 지정
     Rigidbody rigid = SubWaveList[i].GetComponent<Rigidbody>();
     rigid.velocity = new Vector3(Temppos.position.x -SubWaveList[i].transform.position.x, 0, Temppos.position.zSubWaveList[i].transform.position.z).normalized * Speed;
     SubWaveList[i].transform.LookAt(new Vector3(Temppos.position.x - SubWaveList[i].transform.position.z,
@@ -365,6 +371,7 @@ SubWaveList.Clear();
 ### Third Wave
 <img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/2f17bec5-826c-4227-a864-8eccfeea9adb" width="600px" height = "500px">
 <br>
+
 - 왼쪽에서 오른쪽으로 간격을 유지하며 다가오는 웨이브
 <br>
 
@@ -373,20 +380,8 @@ public void Wave3Init()
 {
     for(int i = 0; i < 30; i++)
     {
-    GameObject enemy = Pooling.instance.GetElement(this.gameObject);
-    enemy.layer = 21;
-    enemy.tag = "WaveEnemy";
-    enemy.SetActive(true);
-
-    Enermy status = enemy.GetComponent<Enermy>();
-    status.maxHp = WaveDatas[2].MaxHP;
-    status.curHp = status.maxHp;
-    status.MoveSpeed = WaveDatas[2].Speed;
-    status.Damage = WaveDatas[2].Damage;
-    status.MyWave = 3;
-    Duration = WaveDatas[2].LifeTime;
-
-    enemy.transform.position = new Vector3(playerpos.position.x - 30f, 0, playerpos.position.z - 50f + (i * 4f));
+        //생성, Status 초기화 부분 생략...
+        enemy.transform.position = new Vector3(playerpos.position.x - 30f, 0, playerpos.position.z - 50f + (i * 4f));
     }
     NowWave = 3;
 }
@@ -394,8 +389,10 @@ public void Wave3Init()
 ### Fourth Wave
 <img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/c6b6a3e3-64b3-424c-b576-c02236428550" width="600px" height = "500px">
 <br>
-- 상하좌우 에서 세번째 웨이브가 발생하는 웨이브
+
+- 상하좌우에서 세 번째 웨이브가 발생하는 웨이브
 <br>
+
 - 웨이브 생성코드
 
 ```C#
@@ -411,6 +408,8 @@ public void Wave4Init()
         NowWave = 4;
     }
 ```
+<br>
+
 - 웨이브 동작코드
 ```C#
 public IEnumerator Wave4Cor(List<GameObject> list)
@@ -430,7 +429,51 @@ public IEnumerator Wave4Cor(List<GameObject> list)
 ### Fifth Wave
 <img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/96efc4af-3d5d-42da-9b7d-619f6b42bc7d" width="600px" height = "500px">
 <br>
+
 - 첫번째 웨이브가 지속적으로 발생하는 웨이브
 <br>
 
+- 웨이브 생성코드
+```C#
+public void Wave5Init()
+{
+    float radius = 25f;
+    for(int i = 1; i <= 36; i++)
+    {
+        //생성코드 생략...
+
+        float rad = Mathf.Deg2Rad * (i * 10f);
+        float x = radius * Mathf.Sin(rad);
+        float z = radius * Mathf.Cos(rad);
+        enemy.transform.position = playerpos.position + new Vector3(x, 0, z);
+
+        //Status 초기화부분 생략...
+}
+LastTimer = 0f;
+NowWave = 5;
+}
+```
+<br>
+
+- 웨이브 반복코드
+```C#
+if (Wave5 == true && WaveTime < 240f)
+{
+    LastTimer += Time.deltaTime;
+    if (LastTimer >= 5f)
+    Wave5Init();
+}
+```
+<br>
+
 # 마무리
+- 신경썼던 부분<br>
+  기능들을 최대한 함수로 만들어 사용하려고 노력했고, 데이터 파서를 만들 때 다른 프로젝트에서도 사용할 수 있도록 확장성을 고려해 개발했습니다.
+  <br>
+  
+- 아쉬웠던 부분<br>
+  위 부분들을 신경 쓰다 보니 스킬, 웨이브 부분에서는 그만큼 신경을 쓰지 못해 난잡한 부분이 있는 거 같습니다.
+<br>
+
+이상 이준호 였습니다.<br>
+긴 글 봐주셔서 감사합니다.

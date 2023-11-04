@@ -117,14 +117,16 @@ switch (gameObject.tag)
     }          
     break;
 }
+
 ```
 ## 액티브 스킬구현
 ### 회전방패
-
+<img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/78d9e72c-20aa-4833-8b94-6e5cf3e6b643" width="600px" height = "300px"><br>
 ### 바닥지속오라
-   
+<img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/9b951625-66b8-4a6f-8c77-655a5a500ae0" width="600px" height = "300px"><br>
 ### 비둘기
-   
+<img src = "https://github.com/LeeJunh0/3D_Roguelike./assets/83407767/b172fe37-8eec-4f46-819f-89193f52e3cb" width="600px" height = "300px"><br>
+
 ## 시간에 따른 난이도구현
 ## 웨이브 이벤트
 # 마무리
